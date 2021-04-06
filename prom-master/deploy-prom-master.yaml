@@ -1,0 +1,30 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: prom-master
+  namespace: prom-master
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: prom-master
+  strategy: {}
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: prom-master
+    spec:
+      containers:
+        - name: prom-master
+          image: prom/prometheus
+          ports:
+          - containerPort: 9090
+          volumeMounts:
+          - name: cm-prom-master
+            mountPath: /etc/prometheus/prometheus.yml
+            subPath: prometheus.yml
+      volumes:
+        - name: cm-prom-master
+          configMap:
+            name: cm-prom-master
